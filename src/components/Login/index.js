@@ -6,6 +6,14 @@ import './index.css'
 class Login extends Component {
   state = {showErrorMsg: true, errMsg: '', userId: '', pin: ''}
 
+  componentDidMount() {
+    const token = Cookies.get('jwt_token')
+    if (token !== undefined) {
+      const {history} = this.props
+      history.replace('/')
+    }
+  }
+
   onSubmitFormFailure = err => {
     this.setState({showErrorMsg: true, errMsg: err})
   }
@@ -19,7 +27,7 @@ class Login extends Component {
   onSubmitForm = async event => {
     event.preventDefault()
     const {userId, pin} = this.state
-    const userDetails = {userId, pin}
+    const userDetails = {user_id: userId, pin}
     const loginUrl = 'https://apis.ccbp.in/ebank/login'
     const options = {
       method: 'POST',
